@@ -2,16 +2,83 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-white">
-      <main className="flex flex-row gap-8 row-start-2 items-center sm:items-start">
-      <div className="w-[200px] h-[400px] p-12 m-12 bg-[#4E148C] border-4 border-[#2C0735]">Hello There!</div>
-      <div className="w-[200px] h-[400px] p-12 m-12 bg-[#2C0735] border-4 border-[#4E148C]">General Kenobi! You are a bold one!</div>
-      <div className="w-[200px] h-[400px] p-12 m-12 bg-[#3498db]"></div>
-      <div className="w-[200px] h-[400px] p-12 m-12 bg-[#3498db]"></div>
+    <div className="min-h-screen bg-[#F7E9E4] flex">
+      {/* Sidebar */}
+      <div className="w-1/4 bg-[#A36A3E] text-[#FFFFFF] flex flex-col p-6">
+        <h1 className="text-2xl mb-8">Hello, Josh!</h1>
+        <ul className="space-y-4">
+          <li className="flex items-center">
+            <span className="material-icons">search</span>
+            <a href="#" className="ml-3">Search</a>
+          </li>
+          <li className="flex items-center">
+            <span className="material-icons">event</span>
+            <a href="#" className="ml-3">Today</a>
+          </li>
+          <li className="flex items-center">
+            <span className="material-icons">calendar_today</span>
+            <a href="#" className="ml-3">Upcoming</a>
+          </li>
+          <li className="flex items-center">
+            <span className="material-icons">tune</span>
+            <a href="#" className="ml-3">Filters & labels</a>
+          </li>
+        </ul>
 
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-      </footer>
+        {/* Streaks Section */}
+        <div className="mt-10">
+          <h2 className="text-lg">My Streaks</h2>
+          <ul className="mt-4 space-y-4">
+            <li className="flex items-center">
+              <span className="material-icons">tag</span>
+              <a href="#" className="ml-3">Education 📚</a>
+            </li>
+            <li className="flex items-center">
+              <span className="material-icons">tag</span>
+              <a href="#" className="ml-3">Work 📈</a>
+            </li>
+            <li className="flex items-center">
+              <span className="material-icons">tag</span>
+              <a href="#" className="ml-3">Gym 💪</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 p-6 text-[#171717]">
+        <h2 className="text-2xl mb-8">View more information about the streak.</h2>
+
+        {/* Streak Card */}
+        <div className="space-y-6">
+          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
+            <input type="checkbox" checked className="w-8 h-8" />
+            <div className="text-center">
+              <h3 className="text-xl">Streak Name</h3>
+              <p className="text-sm">Average: 5.5 | Total: 100</p>
+            </div>
+            <div className="text-center">
+              <span className="text-4xl font-bold">14</span>
+            </div>
+          </div>
+
+          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
+            <input type="checkbox" className="w-8 h-8" />
+            <div className="text-center">
+              <h3 className="text-xl">Streak Name</h3>
+              <p className="text-sm">Average: 2.0 | Total: 12</p>
+            </div>
+            <div className="text-center">
+              <span className="text-4xl font-bold">6</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Add Button */}
+        <div className="mt-8 flex justify-center">
+          <button className="bg-[#C88B69] text-[#FFFFFF] py-2 px-4 rounded-full">Add +</button>
+        </div>
+      </div>
     </div>
   );
 }
