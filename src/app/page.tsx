@@ -51,7 +51,7 @@ export default function Home() {
  
         {/* Streak Card */}
         <div className="space-y-6">
-          <div className="bg-[#ffad45] rounded-lg p-6 shadow-md flex justify-between items-center">
+          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
             <input type="checkbox"  className="w-8 h-8" />
             <div className="text-center">
               <h3 className="text-xl">Streak Name</h3>
@@ -62,7 +62,7 @@ export default function Home() {
             </div>
           </div>
  
-          <div className="bg-[#ffad45] rounded-lg p-6 shadow-md flex justify-between items-center">
+          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
             <input type="checkbox" className="w-8 h-8" />
             <div className="text-center">
               <h3 className="text-xl">Streak Name</h3>
