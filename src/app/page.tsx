@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F7E9E4] flex">
       {/* Sidebar */}
-      <div className="w-1/4 bg-[#A36A3E] text-[#FFFFFF] flex flex-col p-6">
+      <div className="w-1/4 bg-[#7b2cbf] text-[#FFFFFF] flex flex-col p-6">
         <h1 className="text-2xl mb-8">Hello, Josh!</h1>
         <ul className="space-y-4">
           <li className="flex items-center">
@@ -46,12 +46,12 @@ export default function Home() {
       </div>
  
       {/* Main Content */}
-      <div className="flex-1 p-6 text-[#171717]">
+      <div className="flex-1 p-6 text-[#171717] bg-white">
         <h2 className="text-2xl mb-8">View more information about the streak.</h2>
  
         {/* Streak Card */}
         <div className="space-y-6">
-          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
+          <div className="bg-[#ffad45] rounded-lg p-6 shadow-md flex justify-between items-center">
             <input type="checkbox"  className="w-8 h-8" />
             <div className="text-center">
               <h3 className="text-xl">Streak Name</h3>
@@ -62,7 +62,7 @@ export default function Home() {
             </div>
           </div>
  
-          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
+          <div className="bg-[#ffad45] rounded-lg p-6 shadow-md flex justify-between items-center">
             <input type="checkbox" className="w-8 h-8" />
             <div className="text-center">
               <h3 className="text-xl">Streak Name</h3>
@@ -76,7 +76,7 @@ export default function Home() {
  
         {/* Add Button */}
         <div className="mt-8 flex justify-center">
-          <button className="bg-[#C88B69] text-[#FFFFFF] py-2 px-4 rounded-full">Add +</button>
+          <button className="bg-[#f18701] text-[#FFFFFF] py-2 px-4 rounded-full">Add +</button>
         </div>
       </div>
     </div>
