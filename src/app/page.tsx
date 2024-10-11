@@ -1,6 +1,12 @@
-import Image from "next/image";
- 
+"use client";
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const router = useRouter();
+  const handleClick = (streakId: number) => {
+    
+    router.push(`/streaks/${streakId}`);
+  };
   return (
     <div className="min-h-screen bg-[#F7E9E4] flex">
       {/* Sidebar */}
@@ -50,7 +56,7 @@ export default function Home() {
         <h2 className="text-2xl mb-8">View more information about the streak.</h2>
  
         {/* Streak Card */}
-        <div className="space-y-6">
+        <div className="space-y-6" onClick={() => handleClick(1)}>
           <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
             <input type="checkbox"  className="w-8 h-8" />
             <div className="text-center">
