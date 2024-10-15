@@ -1,12 +1,20 @@
 "use client";
 import { useRouter } from 'next/navigation';
+import StreakCard from "./components/streakCard";
+import useSWR from 'swr';
+const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function Home() {
   const router = useRouter();
-  const handleClick = (streakId: number) => {
-    
+  const { data, error } = useSWR('/api/streaks', fetcher)
+  if (error) return <div>Failed to load</div>
+  if (!data) return <div>Loading...</div>
+
+
+    const handleClick = (streakId: number) => {
     router.push(`/streaks/${streakId}`);
   };
+  
   return (
     <div className="min-h-screen bg-[#F7E9E4] flex">
       {/* Sidebar */}
@@ -56,30 +64,11 @@ export default function Home() {
         <h2 className="text-2xl mb-8">View more information about the streak.</h2>
  
         {/* Streak Card */}
-        <div className="space-y-6" onClick={() => handleClick(1)}>
-          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
-            <input type="checkbox"  className="w-8 h-8" />
-            <div className="text-center">
-              <h3 className="text-xl">Streak Name</h3>
-              <p className="text-sm">Average: 5.5 | Total: 100</p>
-            </div>
-            <div className="text-center">
-              <span className="text-4xl font-bold">14</span>
-            </div>
-          </div>
- 
-          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
-            <input type="checkbox" className="w-8 h-8" />
-            <div className="text-center">
-              <h3 className="text-xl">Streak Name</h3>
-              <p className="text-sm">Average: 2.0 | Total: 12</p>
-            </div>
-            <div className="text-center">
-              <span className="text-4xl font-bold">6</span>
-            </div>
-          </div>
+        <div className="space-y-6">
+          {data.map((result: any) => (
+            <StreakCard key={result.id} streak={result} onClick={() => handleClick(result.id)} />
+          ))}
         </div>
- 
         {/* Add Button */}
         <div className="mt-8 flex justify-center">
           <button className="bg-[#f18701] text-[#FFFFFF] py-2 px-4 rounded-full">Add +</button>
@@ -88,4 +77,3 @@ export default function Home() {
     </div>
   );
 }
- 
