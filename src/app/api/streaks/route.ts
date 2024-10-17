@@ -3,6 +3,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/prisma'
 
+
 // Handle GET requests
 export async function GET() {
   try {
@@ -15,19 +16,27 @@ export async function GET() {
 
 // Handle POST requests
 export async function POST(req: Request) {
-  const body = await req.json()
-  const { title, count, datatype } = body
+  const body = await req.json();
+  const { title, streakType, count, datatype, streakCount, average } = body;
+
+  if (!title || !streakType) {
+    return NextResponse.json({ error: 'Title and Streak Type are required' }, { status: 400 });
+  }
 
   try {
     const newStreak = await prisma.streak.create({
       data: {
         title,
-        count: parseFloat(count),
-        datatype,
+        streakType,
+        streakCount: parseInt(streakCount, 10) || 0,
+        count: parseFloat(count) || 0,
+        average: parseFloat(average) || 0,
+        datatype: streakType === 'COUNT' ? datatype : 'NONE',  // Ensure datatype is handled correctly for simple streaks
       },
-    })
-    return NextResponse.json(newStreak)
+    });
+    return NextResponse.json(newStreak);
   } catch (error) {
-    return NextResponse.json({ error: 'Error creating streak' }, { status: 500 })
+    console.error('Error creating streak:', error);
+    return NextResponse.json({ error: 'Error creating streak' }, { status: 500 });
   }
 }
