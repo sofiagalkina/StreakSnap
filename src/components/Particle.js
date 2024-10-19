@@ -16,8 +16,8 @@ const Particle = () => {
       options={{
         fullScreen: { enable: false },
         particles: {
-          number: { value: 27 },
-          size: { value: 16 },
+          number: { value: 37 },
+          size: { value: 18 },
           move: { enable: true, speed: 2 },
           shape: {
             type: "image",
@@ -28,6 +28,27 @@ const Particle = () => {
             },
           },
           color: { value: "#FF1493" },
+        },
+        interactivity: {
+          events: {
+            onClick: {
+              enable: true,
+              mode: "push",
+            },
+            onHover: {
+              enable: true,
+              mode: "repulse",
+            },
+          },
+          modes: {
+            push: {
+              quantity: 5, // Adds 5 particles on click
+            },
+            repulse: {
+              distance: 100, // Repulses particles within 100px on hover
+            },
+
+          },
         },
       }}
     />
