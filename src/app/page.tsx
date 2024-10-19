@@ -21,8 +21,8 @@ const MainMenu: React.FC = () => {
             Go to Streaks
           </button>
         </Link>
+       </div>
       </div>
-    </div>
   );
 };
 
