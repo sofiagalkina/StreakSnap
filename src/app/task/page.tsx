@@ -20,7 +20,8 @@ export default function Home() {
   if (!data) return <div>Loading...</div>
   console.log(data);
 
-    const handleClick = (streakId: number) => {
+
+  const handleClick = (streakId: number) => {
     router.push(`/streaks/${streakId}`);
   };
 

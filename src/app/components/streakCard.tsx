@@ -43,7 +43,8 @@ export default function StreakCard({ streak }) {
 
       if (res.ok) {
         setIsChecked(true);
-        setIsDisabled(true); // Disable checkbox until next day
+        setIsDisabled(true);
+        window.location.reload(); // Refresh the entire page after the streak is recorded
       } else {
         console.error('Failed to update simple streak');
       }
@@ -59,6 +60,7 @@ export default function StreakCard({ streak }) {
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
+
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,6 +82,7 @@ export default function StreakCard({ streak }) {
       setIsDisabled(true);
       console.log('Streak updated successfully');
       handleModalClose();
+      window.location.reload(); // Refresh the entire page after the streak is recorded
     } else {
       console.error('Failed to update streak');
     }
