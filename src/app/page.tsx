@@ -6,7 +6,7 @@ import Particle from '../components/Particle';
 
 const MainMenu: React.FC = () => {
   return (
-    <div className="relative flex justify-center items-center h-screen bg-gray-100">
+    <div className="relative flex justify-center items-center h-screen bg-gray-100" style={{ userSelect: 'none'}}>
       {/* Particle Background */}
       <div className="absolute inset-0 z-0">
         <Particle />

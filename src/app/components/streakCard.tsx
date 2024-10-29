@@ -1,6 +1,12 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
+/*
+Sofia's trst code to see if the error goes away:
+
+*/
+
+
 export default function StreakCard({ streak }) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
