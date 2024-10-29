@@ -23,6 +23,8 @@ model Streak {
   datatype    DataType    // The type of the streak (e.g., reps, distance, weight, gallons)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  lastUpdated DateTime    @default(now())
+
 }
 
 enum StreakType {
@@ -52,6 +54,7 @@ model Post {
   published Boolean  @default(false)
   authorId  Int
   author    User     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  lastUpdated DateTime    @default(now())
 }
 
 model Profile {

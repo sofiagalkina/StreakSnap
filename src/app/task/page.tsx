@@ -1,5 +1,80 @@
- 
+"use client";
+import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import StreakCard from "../components/streakCard";
+import useSWR from 'swr';
+const fetcher = (url: string) => fetch(url).then(res => res.json())
+
 export default function Home() {
+  const router = useRouter();
+  const { data, error } = useSWR('/api/streaks', fetcher)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCountStreak, setIsCountStreak] = useState(true);
+  const [formData, setFormData] = useState({
+    title: '',
+    streakType: 'COUNT',
+    count: 0,
+    datatype: 'REPS',
+  });
+  if (error) return <div>Failed to load</div>
+  if (!data) return <div>Loading...</div>
+  console.log(data);
+
+
+  const handleClick = (streakId: number) => {
+    router.push(`/streaks/${streakId}`);
+  };
+
+  const handleModalToggle = () => {
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleStreakTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const isCount = e.target.value === 'COUNT';
+    setIsCountStreak(isCount);
+    setFormData({
+      ...formData,
+      streakType: e.target.value,
+      datatype: isCount ? 'REPS' : '', // Clear datatype if it's a simple streak
+      count: isCount ? 0 : 0, // Reset count for simple streaks
+    });
+  };
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const streakData = {
+      ...formData,
+      streakCount: 0,
+      average: 0,
+    };
+    console.log(streakData);
+
+    const res = await fetch('/api/streaks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(streakData),
+    });
+
+    if (res.ok) {
+      // Successfully added streak, close modal and refresh data
+      handleModalToggle();
+      router.refresh(); // Refresh the page or data
+    } else {
+      // Handle error (e.g., show error message)
+      console.error('Failed to add streak');
+    }
+  };
+
+  
   return (
     <div className="min-h-screen bg-[#F7E9E4] flex">
       {/* Sidebar */}
@@ -50,35 +125,98 @@ export default function Home() {
  
         {/* Streak Card */}
         <div className="space-y-6">
-          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
-            <input type="checkbox"  className="w-8 h-8" />
-            <div className="text-center">
-              <h3 className="text-xl">Streak Name</h3>
-              <p className="text-sm">Average: 5.5 | Total: 100</p>
-            </div>
-            <div className="text-center">
-              <span className="text-4xl font-bold">14</span>
-            </div>
-          </div>
- 
-          <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center">
-            <input type="checkbox" className="w-8 h-8" />
-            <div className="text-center">
-              <h3 className="text-xl">Streak Name</h3>
-              <p className="text-sm">Average: 2.0 | Total: 12</p>
-            </div>
-            <div className="text-center">
-              <span className="text-4xl font-bold">6</span>
-            </div>
-          </div>
+          {data.map((result: any) => (
+            <StreakCard key={result.id} streak={result} onClick={() => handleClick(result.id)} />
+          ))}
         </div>
- 
         {/* Add Button */}
         <div className="mt-8 flex justify-center">
-          <button className="bg-[#f18701] text-[#FFFFFF] py-2 px-4 rounded-full">Add +</button>
+          <button className="bg-[#f18701] text-[#FFFFFF] py-2 px-4 rounded-full" onClick={handleModalToggle} >Add +</button>
         </div>
       </div>
+       {/* Modal Overlay */}
+       {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl text-[#000000] mb-4 ">Add New Streak</h2>
+            <form onSubmit={handleFormSubmit}>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+                  Title
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  id="title"
+                  name="title"
+                  type="text"
+                  placeholder="Enter streak title"
+                  value={formData.title}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="streakType">
+                  Streak Type
+                </label>
+                <select
+                  id="streakType"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  value={formData.streakType}
+                  onChange={handleStreakTypeChange}
+                  required
+                >
+                  <option value="COUNT">Count Streak</option>
+                  <option value="SIMPLE">Simple Streak</option>
+                </select>
+              </div>
+
+              {isCountStreak && (
+              <div className="mb-6">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="type">
+                  Type
+                </label>
+                <select
+                  id="datatype"
+                  name="datatype"
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  value={formData.datatype}
+                  onChange={handleInputChange}
+                  disabled={!isCountStreak}
+                  required={isCountStreak}
+                >
+                  <option value="REPS">REPS</option>
+                  <option value="DISTANCE">DISTANCE</option>
+                  <option value="WEIGHT">WEIGHT</option>
+                  <option value="GALLONS">GALLONS</option>
+                  <option value="SECONDS">SECONDS</option>
+                  <option value="MINUTES">MINUTES</option>
+                  <option value="HOURS">HOURS</option>
+                  <option value="MILES">MILES</option>
+                  <option value="KILOMETERS">KILOMETERS</option>
+                  <option value="LITERS">LITERS</option>
+                </select>
+              </div>
+              )}
+              <div className="flex items-center justify-between">
+                <button
+                  className="bg-[#f18701] hover:bg-[#f18701] text-white font-bold py-2 px-4 rounded"
+                  type="submit"
+                >
+                  Save
+                </button>
+                <button
+                  className="text-red-500 hover:text-red-700"
+                  type="button"
+                  onClick={handleModalToggle}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
- 
