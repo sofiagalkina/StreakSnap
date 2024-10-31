@@ -5,12 +5,37 @@ import { prisma } from '../../../../lib/prisma'
 
 
 // Handle GET requests
-export async function GET() {
+// export async function GET() {
+//   try {
+//     const streaks = await prisma.streak.findMany()
+//     return NextResponse.json(streaks)
+//   } catch (error) {
+//     return NextResponse.json({ error: 'Error fetching streaks' }, { status: 500 })
+//   }
+// }
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const id = url.searchParams.get('id');
+
   try {
-    const streaks = await prisma.streak.findMany()
-    return NextResponse.json(streaks)
+      if (id) {
+          // Fetch a specific streak by ID
+          const streak = await prisma.streak.findUnique({
+              where: { id: parseInt(id) },
+          });
+
+          if (!streak) {
+              return NextResponse.json({ error: 'Streak not found' }, { status: 404 });
+          }
+
+          return NextResponse.json(streak);
+      } else {
+          // Fetch all streaks
+          const streaks = await prisma.streak.findMany();
+          return NextResponse.json(streaks);
+      }
   } catch (error) {
-    return NextResponse.json({ error: 'Error fetching streaks' }, { status: 500 })
+      return NextResponse.json({ error: 'Error fetching streak(s)' }, { status: 500 });
   }
 }
 
@@ -38,6 +63,36 @@ export async function POST(req: Request) {
   } catch (error) {
     console.error('Error creating streak:', error);
     return NextResponse.json({ error: 'Error creating streak' }, { status: 500 });
+  }
+}
+
+// Handle PUT requests (Edit Streaks)
+export async function PUT(request: Request) {
+  const url = new URL(request.url);
+  const id = url.searchParams.get('id');
+
+  if (!id) {
+      return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+  }
+
+  try {
+      const { title, streakCount, count, average } = await request.json(); // Parse title and count from request body
+
+      // Update the streak in the database
+      const updatedStreak = await prisma.streak.update({
+          where: { id: parseInt(id) },
+          data: {
+              title,
+              streakCount,
+              count,
+              average
+          },
+      });
+
+      return NextResponse.json(updatedStreak, { status: 200 });
+  } catch (error) {
+      console.error('Error updating streak:', error);
+      return NextResponse.json({ error: 'Error updating streak' }, { status: 500 });
   }
 }
 
