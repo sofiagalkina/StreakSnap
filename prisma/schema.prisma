@@ -69,10 +69,17 @@ model User {
   name    String?  @db.VarChar(255)
   email   String   @unique @db.VarChar(255)
 <<<<<<< HEAD
+<<<<<<< HEAD
   password String   
 =======
   password String  @db.VarChar(255)
 >>>>>>> 2758217 (gave users passwords)
+=======
+  password String  @db.VarChar(255)
+=======
+  password String   
+>>>>>>> 215da12 (added login functionality)
+>>>>>>> 7203e41 (added login functionality)
   posts   Post[]
   profile Profile?
 }
