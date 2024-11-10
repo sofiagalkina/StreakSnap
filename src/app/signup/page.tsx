@@ -1,134 +1,62 @@
 "use client";
-<<<<<<< HEAD
 import React, { useState } from 'react';
-import { prisma } from '@/../lib/prisma';
-import bcrypt from 'bcryptjs';
-import { useRouter } from 'next/navigation'; // Use only useRouter for routing in Next.js 13
+import { useRouter } from 'next/navigation';
 
 const SignUpPage: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const router = useRouter(); // useRouter for programmatic navigation
+  const router = useRouter();
 
-=======
-import React from 'react';
-import { prisma } from '@/../lib/prisma'
-import bcrypt from 'bcryptjs'; 
-
-
-const SignUpPage: React.FC = () => {
->>>>>>> 7203e41 (added login functionality)
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Cast the target to HTMLFormElement to access elements
-    const target = e.target as HTMLFormElement;
-    const email = target.elements.namedItem('email') as HTMLInputElement;
-    const password = target.elements.namedItem('password') as HTMLInputElement;
-
-<<<<<<< HEAD
-    try {
-      const hashedPassword = await bcrypt.hash(password.value, 10);
-
-      // Create the user in your database
-      await prisma.user.create({
-        data: {
-          email: email.value,
-          password: hashedPassword,
-        },
-      });
-
-      // Redirect to the task page after successful sign-up
-      router.push('/task');
-    } catch (error) {
-      console.log(error);
-      setErrorMessage('Invalid email or password');
-    }
-=======
-    // Hash the password before saving
-    const hashedPassword = await bcrypt.hash(password.value, 10);
-
-    // Create the user in your database
-    await prisma.user.create({
-      data: {
-        email: email.value,
-        password: hashedPassword,
-      },
+    const response = await fetch('/api/auth/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
     });
 
-    // Handle post-signup logic (e.g., redirect or display success message)
->>>>>>> 7203e41 (added login functionality)
+    if (response.ok) {
+      const userData = await response.json();
+      // Handle user data
+      router.push('/task');
+    } else {
+      setErrorMessage('Failed to sign up. Please try again.');
+    }
   };
 
   return (
-    <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
-<<<<<<< HEAD
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">Sign Up</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+    <div className="flex justify-center items-center h-screen bg-gray-100">
+      <form onSubmit={handleSubmit} className="p-8 bg-white rounded shadow-md">
+        <h1 className="text-4xl font-bold mb-4 text-black">Sign Up</h1>
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email:</label>
+          <label htmlFor="email" className="block mb-2 text-black">Email:</label>
           <input
             type="email"
-            name="email"
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
-            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
           />
         </div>
-        <div className="mb-6">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password:</label>
+        <div className="mb-4">
+          <label htmlFor="password" className="block mb-2 text-black">Password:</label>
           <input
             type="password"
-            name="password"
-            required
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
-            placeholder="******************"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+            required
           />
         </div>
-        <button
-          type="submit"
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-        >
+        <button type="submit" className="w-full py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
           Sign Up
         </button>
-        {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>} {/* Show error message if any */}
+        {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
       </form>
     </div>
-=======
-    <h1 className="text-4xl font-bold text-gray-800 mb-6">Sign Up</h1>
-    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email:</label>
-        <input
-          type="email"
-          name="email"
-          required
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="email"
-          placeholder="you@example.com"
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">Password:</label>
-        <input
-          type="password"
-          name="password"
-          required
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="password"
-          placeholder="******************"
-        />
-      </div>
-      <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full"
-      >
-        Sign Up
-      </button>
-    </form>
-  </div>
->>>>>>> 7203e41 (added login functionality)
   );
 };
 
