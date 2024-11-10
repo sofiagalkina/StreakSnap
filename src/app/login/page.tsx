@@ -1,31 +1,27 @@
 "use client";
-
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
+import { useRouter } from 'next/navigation';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { setUser } = useAuth();
+  const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const response = await fetch('/api/auth/login', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    
+
     if (response.ok) {
       const userData = await response.json();
-      setUser(userData); // Set the user data in context
-      // Redirect to the main page or a dashboard after login
-      window.location.href = '/';
+      // Store user data in context or local storage if needed
+      router.push('/task');
     } else {
-      console.error('Login failed');
-      // Handle login error (e.g., show an error message)
+      setErrorMessage('Invalid email or password');
     }
   };
 
@@ -58,6 +54,7 @@ const LoginPage: React.FC = () => {
         <button type="submit" className="w-full py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
           Login
         </button>
+        {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
       </form>
     </div>
   );
