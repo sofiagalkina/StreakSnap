@@ -14,10 +14,10 @@ interface Streak {
 }
 
 type StreakStatistics = {
-  totalStreakCount: number;
+  totalStreak: number;
   totalCount: number;
   totalAverage: number;
-  highestStreakCount: number;
+  highestStreak: number;
   highestCount: number;
   highestAverage: number;
 };
@@ -40,7 +40,7 @@ export default function StreakDetails() {
           try {
               const response = await fetch(`/api/streakStats?streakId=${id}`);
               const data = await response.json();
-              setStreakStats(data);
+              setStreakStats(data[0]);
               console.log('Streak statistics:', data);
           } catch (error) {
               console.error('Error fetching streak statistics:', error);
@@ -94,12 +94,20 @@ const handleSubmit = async (event: React.FormEvent) => {
     {streakStats ? (
         <>
             <h3>Streak Statistics</h3>
-            <p>Total Streak Count: {streakStats.totalStreakCount}</p>
-            <p>Total Count: {streakStats.totalCount}</p>
-            <p>Total Average: {streakStats.totalAverage}</p>
-            <p>Highest Streak Count: {streakStats.highestStreakCount}</p>
-            <p>Highest Count: {streakStats.highestCount}</p>
-            <p>Highest Average: {streakStats.highestAverage}</p>
+            <p>Total Streak Count: {streakStats.totalStreak}</p>
+            {streak?.streakType === 'COUNT' && (
+              <section>
+              <p>Total Count: {streakStats.totalCount.toFixed(2)}</p>
+              <p>Total Average: {streakStats.totalAverage.toFixed(2)}</p>
+              </section>
+            )}
+            <p>Highest Streak Count: {streakStats.highestStreak}</p>
+            {streak?.streakType === 'COUNT' && (
+              <section>
+              <p>Highest Count: {streakStats.highestCount.toFixed(2)}</p>
+              <p>Highest Average: {streakStats.highestAverage.toFixed(2)}</p>
+              </section>
+            )}
         </>
     ) : (
         <p>Loading statistics...</p>
@@ -143,7 +151,7 @@ const handleSubmit = async (event: React.FormEvent) => {
           <label className="block text-gray-700 font-semibold mb-2">Count:
             <input
               type="number"
-              value={streak?.count}
+              value={streak?.count.toFixed(2)}
               readOnly
               className="w-full p-2 border rounded-md bg-gray-100 focus:outline-none"
             />
@@ -151,7 +159,7 @@ const handleSubmit = async (event: React.FormEvent) => {
           <label className="block text-gray-700 font-semibold mb-2">Average:
             <input
               type="number"
-              value={streak?.average}
+              value={streak?.average.toFixed(2)}
               readOnly
               className="w-full p-2 border rounded-md bg-gray-100 focus:outline-none"
             />

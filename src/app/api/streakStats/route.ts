@@ -13,10 +13,17 @@ export async function GET(request: Request) {
         // Fetch all streak entries for the given streakId
         const streakEntries = await prisma.streak.findMany({
             where: { id: parseInt(streakId, 10) },
-            orderBy: { createdAt: 'desc' },
+            select: { 
+                highestStreak: true,
+                highestCount: true,
+                highestAverage: true,
+                totalStreak: true,
+                totalCount: true,
+                totalAverage: true,
+            },
         });
 
-        const statistics = processStreakStatistics(streakEntries);
+        const statistics = streakEntries;
 
         // Return only the processed statistics
         return NextResponse.json(statistics);

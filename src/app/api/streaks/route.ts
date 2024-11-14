@@ -107,30 +107,58 @@ export async function PATCH(req: Request) {
 
     // Determine if it's a count or simple streak
     let updatedStreak;
+    let updatedHighestStreak = existingStreak.highestStreak;
+    let updatedHighestCount = existingStreak.highestCount;
+    let updatedHighestAverage = existingStreak.highestAverage;
 
     if (existingStreak.streakType === 'COUNT') {
-      // Update count streak
       if (newCount === undefined) {
         return NextResponse.json({ error: 'newCount is required for count streaks' }, { status: 400 });
+      }
+      const updatedStreakCount = existingStreak.streakCount + 1;
+      const updatedCount = existingStreak.count + parseFloat(newCount);
+      const updatedAverage = updatedCount / updatedStreakCount;
+
+      if (updatedStreakCount > existingStreak.highestStreak) {
+        updatedHighestStreak = existingStreak.streakCount + 1;
+      }
+      if (updatedCount > existingStreak.highestCount) {
+        updatedHighestCount = existingStreak.highestCount + 1;
+      }
+      if (updatedAverage > existingStreak.highestAverage) {
+        updatedHighestAverage= existingStreak.highestCount / existingStreak.highestStreak;
       }
 
       updatedStreak = await prisma.streak.update({
         where: { id: parseInt(id, 10) },
         data: {
-          count: existingStreak.count + parseFloat(newCount), // Update the count
-          streakCount: existingStreak.streakCount + 1,        // Increment the streak count
-          average: (existingStreak.count + parseFloat(newCount)) / (existingStreak.streakCount + 1), // Recalculate average
-          lastUpdated: new Date(),                            // Update the last updated timestamp
+          count: existingStreak.count + parseFloat(newCount), 
+          streakCount: existingStreak.streakCount + 1,        
+          average: (existingStreak.count + parseFloat(newCount)) / (existingStreak.streakCount + 1), 
+          lastUpdated: new Date(),            
+          totalStreak: existingStreak.totalStreak + 1,
+          totalCount: existingStreak.totalCount + parseFloat(newCount),
+          totalAverage: (existingStreak.totalCount + parseFloat(newCount)) / (existingStreak.totalStreak + 1),                
+          highestStreak: updatedHighestStreak,
+          highestCount: updatedHighestCount,
+          highestAverage: updatedHighestAverage,
         },
       });
 
     } else if (existingStreak.streakType === 'SIMPLE') {
-      // Update simple streak (only increment streakCount and update lastUpdated)
+      const updatedStreakCount = existingStreak.streakCount + 1;
+      if (updatedStreakCount > existingStreak.highestStreak) {
+        updatedHighestStreak = existingStreak.streakCount + 1;
+        console.log("updatedHighestStreak:", updatedHighestStreak);
+      }
+
       updatedStreak = await prisma.streak.update({
         where: { id: parseInt(id, 10) },
         data: {
-          streakCount: existingStreak.streakCount + 1, // Increment the streak count
-          lastUpdated: new Date(),                    // Update the last updated timestamp
+          streakCount: existingStreak.streakCount + 1, 
+          lastUpdated: new Date(),                    
+          totalStreak: existingStreak.totalStreak + 1,
+          highestStreak: updatedHighestStreak,
         },
       });
     }
