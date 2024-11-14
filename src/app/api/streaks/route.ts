@@ -1,18 +1,7 @@
 // app/api/streaks/route.ts
-
 import { NextResponse } from 'next/server'
 import { prisma } from '../../../../lib/prisma'
 
-
-// Handle GET requests
-// export async function GET() {
-//   try {
-//     const streaks = await prisma.streak.findMany()
-//     return NextResponse.json(streaks)
-//   } catch (error) {
-//     return NextResponse.json({ error: 'Error fetching streaks' }, { status: 500 })
-//   }
-// }
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const id = url.searchParams.get('id');

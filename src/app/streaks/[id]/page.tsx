@@ -7,10 +7,20 @@ interface Streak {
   id: number;
   title: string;
   count: number;
+  average: number;
   streakType: string;
   datatype: string;
   streakCount?: number;
 }
+
+type StreakStatistics = {
+  totalStreakCount: number;
+  totalCount: number;
+  totalAverage: number;
+  highestStreakCount: number;
+  highestCount: number;
+  highestAverage: number;
+};
 
 export default function StreakDetails() {
   const params = useParams();
@@ -23,7 +33,22 @@ export default function StreakDetails() {
   const [average, setAverage] = useState<number>(0);
   const [showResetMessage, setShowResetMessage] = useState<boolean>(false);
   const [showResetCountMessage, setShowResetCountMessage] = useState<boolean>(false);
+  const [streakStats, setStreakStats] = useState<StreakStatistics | null>(null);
 
+  useEffect(() => {
+      const fetchStreakStats = async () => {
+          try {
+              const response = await fetch(`/api/streakStats?streakId=${id}`);
+              const data = await response.json();
+              setStreakStats(data);
+              console.log('Streak statistics:', data);
+          } catch (error) {
+              console.error('Error fetching streak statistics:', error);
+          }
+      };
+
+      fetchStreakStats();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -65,10 +90,23 @@ const handleSubmit = async (event: React.FormEvent) => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-gray-700 font-semibold">
-    <div className="w-3/4 h-3/4 max-w-xl mx-auto mt-4 bg-white p-8 rounded-lg shadow-lg">Calendar here</div>
+    <div className="w-3/4 h-3/4 max-w-xl mx-auto mt-4 bg-white p-8 rounded-lg shadow-lg">
+    {streakStats ? (
+        <>
+            <h3>Streak Statistics</h3>
+            <p>Total Streak Count: {streakStats.totalStreakCount}</p>
+            <p>Total Count: {streakStats.totalCount}</p>
+            <p>Total Average: {streakStats.totalAverage}</p>
+            <p>Highest Streak Count: {streakStats.highestStreakCount}</p>
+            <p>Highest Count: {streakStats.highestCount}</p>
+            <p>Highest Average: {streakStats.highestAverage}</p>
+        </>
+    ) : (
+        <p>Loading statistics...</p>
+    )}
+    </div>
     <form onSubmit={handleSubmit} className="max-w-6xl mx-auto mt-4 bg-white p-8 rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold text-purple-600 mb-6">Edit Streak</h1>
-      
       <div className="mb-4">
         <label className="block text-gray-700 font-semibold mb-2">Title:
         <input
