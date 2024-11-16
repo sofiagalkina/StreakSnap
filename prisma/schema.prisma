@@ -21,6 +21,12 @@ model Streak {
   count       Float       // The quantity or amount (e.g., 50 for 50 pushups, 1.5 for 1.5 gallons of water)
   average     Float       // The average amount per day (e.g., 50 pushups per day)
   datatype    DataType    // The type of the streak (e.g., reps, distance, weight, gallons)
+  totalStreak Int         // The total number of streaks
+  totalCount  Float       // The total count
+  totalAverage Float      // The total average
+  highestStreak Int       // The highest streak count
+  highestCount  Float     // The highest count
+  highestAverage Float    // The highest average
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   lastUpdated DateTime    @default(now())

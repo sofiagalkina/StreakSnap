@@ -103,7 +103,7 @@ export default function StreakCard({ streak }) {
           <h3 className="text-xl">{streak.title}</h3>
           {streak.streakType === 'COUNT' && (
             <p className="text-sm">
-              Average: {streak.average} | Total: {streak.count} {streak.datatype}
+              Average: {streak.average.toFixed(2)} | Total: {streak.count.toFixed(0)} {streak.datatype}
             </p>
           )}
         </div>
