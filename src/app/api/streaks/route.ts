@@ -169,3 +169,25 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: 'Error updating streak' }, { status: 500 });
   }
 }
+
+// Handle DELETE requests (Delete a streak)
+export async function DELETE(request: Request) {
+  const url = new URL(request.url);
+  const id = url.searchParams.get('id');
+
+  if (!id) {
+    return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+  }
+
+  try {
+    // Attempt to delete the streak by ID
+    const deletedStreak = await prisma.streak.delete({
+      where: { id: parseInt(id, 10) },
+    });
+
+    return NextResponse.json(deletedStreak, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting streak:', error);
+    return NextResponse.json({ error: 'Error deleting streak' }, { status: 500 });
+  }
+}
