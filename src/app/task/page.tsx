@@ -63,7 +63,6 @@ export default function Home() {
       },
       body: JSON.stringify(streakData),
     });
-
     if (res.ok) {
       // Successfully added streak, close modal and refresh data
       handleModalToggle();
