@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
     if (response.ok) {
       const userData = await response.json();
       setUser(userData); 
-      router.push('/task');
+      router.push(`task/${userData.id}`);
     } else {
       console.error('Login failed');
       setErrorMessage('Login Failed. Please check your credentials.');

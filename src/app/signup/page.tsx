@@ -19,7 +19,7 @@ const SignUpPage: React.FC = () => {
     if (response.ok) {
       const userData = await response.json();
       // Handle user data
-      router.push('/task');
+      router.push(`task/${userData.id}`);
     } else {
       setErrorMessage('Failed to sign up. Please try again.');
     }

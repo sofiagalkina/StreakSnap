@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
-import StreakCard from "../components/streakCard";
+import StreakCard from "../../components/streakCard";
 import useSWR from 'swr';
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
