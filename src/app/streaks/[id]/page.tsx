@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 
 interface Streak {
   id: number;
+  userId: number;
   title: string;
   count: number;
   average: number;

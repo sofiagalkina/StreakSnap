@@ -15,6 +15,7 @@ datasource db {
 
 model Streak {
   id          Int         @id @default(autoincrement())
+  userId      Int         
   title       String      // The title or name of the streak (e.g., "Pushups")
   streakType  StreakType  // The type of streak (e.g., simple or count)
   streakCount Int         // The number of days the streak has been completed
