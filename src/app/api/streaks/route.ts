@@ -4,13 +4,26 @@ import { prisma } from '../../../../lib/prisma'
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const id = url.searchParams.get('id');
+  const userId = url.searchParams.get('userId');
+  if (!userId) {
+    const id = url.searchParams.get('id');
+    // Fetch a specific streak by ID
+    const streak = await prisma.streak.findFirst({
+      where: { id: parseInt(id) },
+    });
+
+    if (!streak) {
+        return NextResponse.json({ error: 'Streak not found' }, { status: 404 });
+    }
+    return NextResponse.json(streak);
+  }
 
   try {
-      if (id) {
+      if (userId) {
           // Fetch a specific streak by ID
-          const streak = await prisma.streak.findUnique({
-              where: { id: parseInt(id) },
+          console.log('userId:', parseInt(userId));
+          const streak = await prisma.streak.findMany({
+              where: { userId: parseInt(userId) },
           });
 
           if (!streak) {
@@ -20,8 +33,8 @@ export async function GET(request: Request) {
           return NextResponse.json(streak);
       } else {
           // Fetch all streaks
-          const streaks = await prisma.streak.findMany();
-          return NextResponse.json(streaks);
+          // const streaks = await prisma.streak.findMany();
+          // return NextResponse.json(streaks);
       }
   } catch (error) {
       return NextResponse.json({ error: 'Error fetching streak(s)' }, { status: 500 });
@@ -31,7 +44,7 @@ export async function GET(request: Request) {
 // Handle POST requests
 export async function POST(req: Request) {
   const body = await req.json();
-  const { title, streakType, count, datatype, streakCount, average } = body;
+  const { title, userId, streakType, count, datatype, streakCount, average } = body;
 
   if (!title || !streakType) {
     return NextResponse.json({ error: 'Title and Streak Type are required' }, { status: 400 });
@@ -41,13 +54,21 @@ export async function POST(req: Request) {
     const newStreak = await prisma.streak.create({
       data: {
         title,
+        userId: parseInt(userId),
         streakType,
         streakCount: parseInt(streakCount, 10) || 0,
         count: parseFloat(count) || 0,
         average: parseFloat(average) || 0,
         datatype: streakType === 'COUNT' ? datatype : 'NONE',
+        totalStreak: 0,
+        totalCount: 0,
+        totalAverage: 0,
+        highestStreak: 0,
+        highestCount: 0,
+        highestAverage: 0,
       },
     });
+    console.log('New Streak:', newStreak);
     return NextResponse.json(newStreak);
   } catch (error) {
     console.error('Error creating streak:', error);

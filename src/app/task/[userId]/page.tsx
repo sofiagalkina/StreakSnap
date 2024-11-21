@@ -1,17 +1,20 @@
 "use client";
-import { useRouter } from 'next/navigation';
-import { useState } from "react";
+import { useParams, useRouter } from 'next/navigation';
+import { useState, useEffect } from "react";
 import StreakCard from "../../components/streakCard";
 import useSWR from 'swr';
+
 const fetcher = (url: string) => fetch(url).then(res => res.json())
 
 export default function Home() {
+  const {userId} = useParams(); 
   const router = useRouter();
-  const { data, error } = useSWR('/api/streaks', fetcher)
+  const { data, error } = useSWR(`/api/streaks?userId=${userId}`, fetcher)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isCountStreak, setIsCountStreak] = useState(true);
   const [formData, setFormData] = useState({
     title: '',
+    userId: userId,
     streakType: 'COUNT',
     count: 0,
     datatype: 'REPS',
@@ -20,13 +23,14 @@ export default function Home() {
   if (!data) return <div>Loading...</div>
   console.log(data);
 
-
   const handleClick = (streakId: number) => {
     router.push(`/streaks/${streakId}`);
   };
 
   const handleModalToggle = () => {
     setIsModalOpen(!isModalOpen);
+    console.log('params:', userId);
+
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -41,6 +45,7 @@ export default function Home() {
     setIsCountStreak(isCount);
     setFormData({
       ...formData,
+      userId: userId,
       streakType: e.target.value,
       datatype: isCount ? 'REPS' : '', // Clear datatype if it's a simple streak
       count: isCount ? 0 : 0, // Reset count for simple streaks
@@ -73,7 +78,6 @@ export default function Home() {
     }
   };
 
-  
   return (
     <div className="min-h-screen bg-[#F7E9E4] flex">
       {/* Sidebar */}
@@ -197,6 +201,7 @@ export default function Home() {
                 </select>
               </div>
               )}
+              <input type="hidden" id='userId' name="userId" value={userId} />
               <div className="flex items-center justify-between">
                 <button
                   className="bg-[#f18701] hover:bg-[#f18701] text-white font-bold py-2 px-4 rounded"
