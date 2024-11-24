@@ -36,21 +36,35 @@ const SignUpPage: React.FC = () => {
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+            className="w-full p-2 border border-gray-300 rounded text-black"
             required
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="password" className="block mb-2 text-black">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
+  <label htmlFor="password" className="block mb-2 text-black">Password:</label>
+  <div className="relative">
+    <input
+      type="password"
+      id="password"
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="w-full p-2 border border-gray-300 rounded text-black pr-10" 
+      required 
+    />
+    <span 
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
+      onClick={() => {
+        const inputField = document.getElementById('password') as HTMLInputElement;
+        if (inputField) {
+          inputField.type = inputField.type === 'password' ? 'text' : 'password';
+        }
+      }}
+    >
+      👀
+    </span>
+  </div>
+</div>
+
         <button type="submit" className="w-full py-2 bg-blue-600 text-black rounded hover:bg-blue-700">
           Sign Up
         </button>
