@@ -104,18 +104,18 @@ export default function Home() {
  
         {/* Streaks Section */}
         <div className="mt-10">
-          <h2 className="text-lg">My Streaks</h2>
+          <h2 className="text-lg">My Streaks:</h2>
           <ul className="mt-4 space-y-4">
             <li className="flex items-center">
-              <span className="material-icons">tag</span>
+              <span className="material-icons"></span>
               <a href="#" className="ml-3">Education 📚</a>
             </li>
             <li className="flex items-center">
-              <span className="material-icons">tag</span>
+              <span className="material-icons"></span>
               <a href="#" className="ml-3">Work 📈</a>
             </li>
             <li className="flex items-center">
-              <span className="material-icons">tag</span>
+              <span className="material-icons"></span>
               <a href="#" className="ml-3">Gym 💪</a>
             </li>
           </ul>
@@ -126,12 +126,22 @@ export default function Home() {
       <div className="flex-1 p-6 text-[#171717] bg-white">
         <h2 className="text-2xl mb-8">View more information about the streak.</h2>
  
+
+    
         {/* Streak Card */}
+        
         <div className="space-y-6">
-          {data.map((result: any) => (
-            <StreakCard key={result.id} streak={result} onClick={() => handleClick(result.id)} />
-          ))}
+        {Array.isArray(data) ? (
+          data.map((result: any) => (
+          <StreakCard key={result.id} streak={result} onClick={() => handleClick(result.id)} />
+         ))
+         ) : (
+          <div>No streaks found for now.</div>
+         )}
         </div>
+
+      
+      
         {/* Add Button */}
         <div className="mt-8 flex justify-center">
           <button className="bg-[#f18701] text-[#FFFFFF] py-2 px-4 rounded-full" onClick={handleModalToggle} >Add +</button>

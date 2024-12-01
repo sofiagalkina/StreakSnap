@@ -1,13 +1,7 @@
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
-/*
-Sofia's trst code to see if the error goes away:
-
-*/
-
-
-export default function StreakCard({ streak }) {
+export default function StreakCard({ streak, onClick }: {streak: any; onClick?: () => void}) {
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [updatedCount, setUpdatedCount] = useState(streak.count);
@@ -36,33 +30,26 @@ export default function StreakCard({ streak }) {
   };
 
   const handleCheckboxClick = async (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent click event from propagating to the card's onClick handler
+    e.stopPropagation(); // Prevents the card's `onClick` from being triggered
+  
     if (streak.streakType === 'SIMPLE') {
-      // Update simple streak directly without opening modal
       const res = await fetch('/api/streaks', {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: streak.id }), // No need for newCount in simple streaks
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: streak.id }),
       });
-
+  
       if (res.ok) {
         setIsChecked(true);
         setIsDisabled(true);
-        window.location.reload(); // Refresh the entire page after the streak is recorded
       } else {
         console.error('Failed to update simple streak');
       }
-
-    } else if (streak.streakType === 'COUNT') {
-      // Open modal for updating count streaks
-      if (!isDisabled) {
-        setIsModalOpen(true); 
-      }
+    } else if (streak.streakType === 'COUNT' && !isDisabled) {
+      setIsModalOpen(true);
     }
   };
-
+  
   const handleModalClose = () => {
     setIsModalOpen(false);
   };
@@ -97,20 +84,34 @@ export default function StreakCard({ streak }) {
   return (
     <>
       {/* Streak Card */}
-      <div className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center" onClick={handleClick}>
-        <input type="checkbox" className="w-8 h-8" onClick={handleCheckboxClick} checked={isChecked} disabled={isDisabled}/>
-        <div className="text-center">
-          <h3 className="text-xl">{streak.title}</h3>
-          {streak.streakType === 'COUNT' && (
-            <p className="text-sm">
-              Average: {streak.average.toFixed(2)} | Total: {streak.count.toFixed(0)} {streak.datatype}
-            </p>
-          )}
-        </div>
-        <div className="text-center">
-          <span className="text-4xl font-bold">{streak.streakCount}</span>
-        </div>
-      </div>
+      <div
+  className="bg-[#EFEFEF] rounded-lg p-6 shadow-md flex justify-between items-center"
+  onClick={() => {
+    console.log("Navigating to streak:", streak.id);
+    router.push(`/streaks/${streak.id}`);
+  }}
+>
+  <input
+    type="checkbox"
+    className="w-8 h-8"
+    onClick={handleCheckboxClick}
+    checked={isChecked}
+    disabled={isDisabled}
+  />
+  <div className="text-center">
+    <h3 className="text-xl">{streak.title}</h3>
+    {streak.streakType === 'COUNT' && (
+      <p className="text-sm">
+        Average: {streak.average?.toFixed(2) ?? 'N/A'} | Total: {streak.count?.toFixed(0) ?? '0'}{' '}
+        {streak.datatype}
+      </p>
+    )}
+  </div>
+  <div className="text-center">
+    <span className="text-4xl font-bold">{streak.streakCount}</span>
+  </div>
+</div>
+
 
       {/* Modal for Updating Count */}
       {isModalOpen && (
