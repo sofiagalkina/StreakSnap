@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
+import ShareCard from '@/app/components/shareCard';
 
 interface Streak {
   id: number;
@@ -126,6 +127,9 @@ const handleModalToggle = () => {
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100 text-gray-700 font-semibold">
+      {streak && (
+            <ShareCard streak={streak}/>
+          )}
     <div className="w-3/4 h-3/4 max-w-xl mx-auto mt-4 bg-white p-8 rounded-lg shadow-lg">
     {streakStats ? (
         <>
