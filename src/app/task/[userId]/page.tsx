@@ -85,20 +85,12 @@ export default function Home() {
         <h1 className="text-2xl mb-8">Hello, Josh!</h1>
         <ul className="space-y-4">
           <li className="flex items-center">
-            <span className="material-icons">search</span>
+            <span className="material-icons">🔎</span>
             <a href="#" className="ml-3">Search</a>
           </li>
           <li className="flex items-center">
-            <span className="material-icons">event</span>
-            <a href="#" className="ml-3">Today</a>
-          </li>
-          <li className="flex items-center">
-            <span className="material-icons">calendar_today</span>
+            <span className="material-icons">📅</span>
             <a href="#" className="ml-3">Upcoming</a>
-          </li>
-          <li className="flex items-center">
-            <span className="material-icons">tune</span>
-            <a href="#" className="ml-3">Filters & labels</a>
           </li>
         </ul>
  

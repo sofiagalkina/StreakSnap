@@ -55,7 +55,7 @@ export default function ShareCard(streak: any) {
   
 
   return (
-    <div className="p-4">
+    <div className="p-6">
       <head>
         <meta property="og:title" content="Check out my streak!" />
         <meta property="og:description" content="Check out my streak: [title] with [streakCount] days! It includes [count] total and an average of [average]." />
@@ -66,20 +66,35 @@ export default function ShareCard(streak: any) {
       <div className="mt-4">
         <button
           onClick={() => shareOnSocialMedia("twitter")}
-          className="bg-blue-400 text-white px-4 py-2 rounded mr-2"
+          className="bg-blue-400 text-white px-4 py-2 rounded mr-2 mb-2"
         >
+          <img 
+          src="/assets/twitter.png"
+          alt="Twitter logo"
+          className="w-6 h-6 mr-2"
+          />
           Share on Twitter
         </button>
         <button
           onClick={() => shareOnSocialMedia("facebook")}
-          className="bg-blue-700 text-white px-4 py-2 rounded mr-2"
+          className="bg-blue-700 text-white px-4 py-2 rounded mr-2 mb-2"
         >
+             <img 
+          src="/assets/fb.png"
+          alt="FB logo"
+          className="w-6 h-6 mr-2"
+          />
           Share on Facebook
         </button>
         <button
           onClick={() => shareOnSocialMedia("linkedin")}
           className="bg-blue-600 text-white px-4 py-2 rounded"
         >
+             <img 
+          src="/assets/linkedin.png"
+          alt="LinkedIn logo"
+          className="w-8 h-8 mr-2 ml-0"
+          />
           Share on LinkedIn
         </button>
       </div>

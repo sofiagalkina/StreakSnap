@@ -236,7 +236,7 @@ const handleModalToggle = () => {
 
         {error && <p className="mt-4 text-red-600 font-semibold">{error}</p>}
       </form>
-      <div className="flex justify-center items-center mt-6">
+      <div className="flex justify-center items-center mt-6 ">
         <button
           className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mt-5"
           onClick={handleModalToggle}
